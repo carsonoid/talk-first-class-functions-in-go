@@ -1,0 +1,1 @@
+# talk-first-class-functions-in-go
