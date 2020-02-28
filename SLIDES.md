@@ -896,7 +896,7 @@ func (p *Printer) SayHello() {
 
 ```golang
 type Greeter interface {
-	SayHello()
+    SayHello()
 }
 
 // PrintFunc is any function or method that takes a string
@@ -904,12 +904,12 @@ type PrintFunc func(string)
 
 // PrintFunc implements the Greeter interface
 func (pf PrintFunc) SayHello() {
-	fmt.Println("Hello from a method of a function")
+    fmt.Println("Hello from a method of a function")
 }
 
 func main() {
-	p := new(PrintFunc)
-	p.SayHello()
+    p := new(PrintFunc)
+    p.SayHello()
 }
 ```
 
@@ -918,6 +918,41 @@ func main() {
 ### Playground: https://play.golang.org/p/stsXMHqyVrY
 
 <iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/stsXMHqyVrY">
+</iframe>
+
+---
+
+# Real World Example: Functional Arguments
+
+## Before
+
+```golang
+s := NewService("http", true, "127.0.0.0:8080", 10, time.Second*3)
+```
+
+## After
+
+```golang
+s := NewService("http",
+    WithEnabled,
+    WithListener("127.0.0.0:8080"),
+    WithRetries(10),
+    WithTimeout(time.Second*3),
+)
+```
+
+---
+
+### Before | Playground: https://play.golang.org/p/7lif9CwAqPe
+
+<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/7lif9CwAqPe">
+</iframe>
+
+---
+
+### After | Playground: https://play.golang.org/p/raE5w2_gb2x
+
+<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/raE5w2_gb2x">
 </iframe>
 
 ---
@@ -935,6 +970,35 @@ h1, h2, h3{
 
 
 https://dave.cheney.net/2016/11/13/do-not-fear-first-class-functions
+
+---
+
+<style scoped>
+p{
+    font-size: 1.5em;
+    display: flex;
+    flex-wrap: nowrap;
+}
+p,h1,h2,h3{
+    text-align: center;
+    white-space: nowrap;
+}
+h1{
+    font-size:2em;
+}
+</style>
+
+
+# __Next From Me:__
+
+# GoWest: May 7-8
+
+## "All Types Of Golang Types"
+
+![bg vertical 50%](./img/gowest.jpeg)
+![bg right 50%](./img/qr-gowest.png)
+
+https://www.gowestconf.com
 
 ---
 <!--
