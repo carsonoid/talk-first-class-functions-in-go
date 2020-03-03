@@ -59,17 +59,19 @@ import (
     "fmt"
 )
 
-var hello = "Hello!" // <- built-in
+var hello = "Hello!"           // <- built-in
 
-func printMsg(msg string) { // <- function
+func printMsg(msg string) {    // <- function
     fmt.Println(msg)
 }
 
-type Greeter interface{ // <- interface
+type Greeter interface{        // <- interface
     SayHello()
 }
 
-type Printer struct{} // <- struct
+type Printer struct{           // <- struct
+    Name string                // <- member
+}
 
 func (p *Printer) SayHello() { // <- method
     printMsg(hello)
@@ -81,7 +83,7 @@ func (p *Printer) SayHello() { // <- method
 # Anatomy of a Function
 
 ```golang
-func NAME(ARGUMENTS) RETURNS { 
+func NAME(ARGUMENTS) RETURNS {
     // CODE
 }
 
@@ -171,7 +173,7 @@ func printWith(p func(string), msg string) {
 
 func main() {
     m := getMessage() // m == string
-    p := getPrinter()  // p == func(string)
+    p := getPrinter() // p == func(string)
     printWith(p, m)
 }
 ```
@@ -554,30 +556,35 @@ type Person struct {
 type PrintFunc func(string)
 
 type MultiPrinter struct {
-    printerOne  PrintFunc
-    printerTwo  PrintFunc
-    lazyPrinter PrintFunc
+    DynamicPrint PrintFunc
+}
+
+func (mp *MultiPrinter) Print(msg string) {
+    fmt.Println(msg)
 }
 
 func main() {
     mp := MultiPrinter{
-        printerOne: func(msg string) { fmt.Println(msg) },
-        printerTwo: func(msg string) { fmt.Println(msg) },
+        DynamicPrint: func(msg string) { fmt.Println(msg) },
     }
 
-    mp.printerOne("Hello!")
-    mp.printerTwo("Howdy!")
+    mp.Print("Hello from a method!")
 
-    mp.lazyPrinter = mp.printerTwo
-    mp.lazyPrinter("Hi!")
+    mp.DynamicPrint("Hello from a member function")
+
+    mp.DynamicPrint = func(msg string) {
+        fmt.Println(time.Now(), "|", msg)
+    }
+
+    mp.DynamicPrint("Hello from a member function")
 }
 ```
 
 ---
 
-### Playground: https://play.golang.org/p/tTRb-CbwtNY
+### Playground: https://play.golang.org/p/J5g728CTmIx
 
-<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/tTRb-CbwtNY">
+<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/J5g728CTmIx">
 </iframe>
 
 ---
@@ -768,7 +775,7 @@ h1 {
 //             ▼ func()?
 c := make(chan string, 1)
 c <- "test"
-fmt.Println(<-t)
+fmt.Println(<-c)
 ```
 
 ---
@@ -904,20 +911,24 @@ type PrintFunc func(string)
 
 // PrintFunc implements the Greeter interface
 func (pf PrintFunc) SayHello() {
-    fmt.Println("Hello from a method of a function")
+    pf("Hello from a function")
+    fmt.Println("Hello from a method of the function")
 }
 
 func main() {
-    p := new(PrintFunc)
-    p.SayHello()
+    p := func(msg string) {
+        fmt.Println(msg)
+    }
+    pf := PrintFunc(p)
+    pf.SayHello()
 }
 ```
 
 ---
 
-### Playground: https://play.golang.org/p/stsXMHqyVrY
+### Playground: https://play.golang.org/p/wfM9TLRnkoA
 
-<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/stsXMHqyVrY">
+<iframe width="100%" height="100%" frameborder="0" src="https://play.golang.org/p/wfM9TLRnkoA">
 </iframe>
 
 ---
